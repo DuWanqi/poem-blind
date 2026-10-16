@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>意象质量盲评 · 这一首的意象用得更好吗</title>
+<style>
+:root{--bg:#14161a;--fg:#e8e6e1;--dim:#8b8f96;--card:#1c1f24;--acc:#c9a227;--line:#2a2e35}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+header{position:sticky;top:0;background:rgba(20,22,26,.96);border-bottom:1px solid var(--line);
+ padding:14px 20px;backdrop-filter:blur(8px);z-index:9}
+h1{margin:0;font-size:17px;font-weight:600}
+.sub{color:var(--dim);font-size:12.5px;margin-top:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:20px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:18px}
+.qh{display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+.n{color:var(--acc);font-weight:700;font-size:13px}
+.story{color:#cfd2d6;font-size:14.5px;background:#20242a;border-left:3px solid var(--acc);
+ padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:16px;white-space:pre-wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.side{border:1px solid var(--line);border-radius:10px;padding:12px;background:#191c21;cursor:pointer;
+ transition:.15s}
+.side:hover{border-color:#3a4048}
+.side.sel{border-color:var(--acc);background:#231f16;box-shadow:0 0 0 1px var(--acc) inset}
+.tag{color:var(--acc);font-size:12px;letter-spacing:.14em;margin-bottom:6px}
+.poem{white-space:pre-wrap;font-size:15.5px;line-height:1.95;
+ font-family:"Songti SC","STSong","SimSun",serif;min-height:3em}
+.opts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.qlab{color:var(--dim);font-size:12.5px;margin-right:2px}
+button{background:#242830;color:var(--fg);border:1px solid var(--line);border-radius:8px;
+ padding:8px 16px;font-size:14px;cursor:pointer}
+button:hover{border-color:var(--acc)}
+button.on{background:var(--acc);color:#1a1a1a;border-color:var(--acc);font-weight:600}
+footer{position:sticky;bottom:0;background:rgba(20,22,26,.96);border-top:1px solid var(--line);
+ padding:14px 20px;display:flex;gap:14px;align-items:center;justify-content:center}
+.done{color:var(--dim);font-size:13px}
+#go{background:var(--acc);color:#1a1a1a;font-weight:700;padding:10px 28px;border:0;border-radius:8px}
+#go:disabled{opacity:.4}
+.pill{color:var(--dim);font-size:12px;margin-left:8px}
+.warn{background:#3a2a12;border:1px solid #7a5c1e;color:#f0d68a;border-radius:8px;
+ padding:8px 12px;font-size:13px;margin-top:8px}
+.mat{margin-top:10px;padding-top:9px;border-top:1px dashed var(--line);
+ color:#9aa0a8;font-size:12.5px;line-height:1.65;white-space:pre-wrap;
+ font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.mat:empty{display:none}
+#note{color:#7fbf7f}
+#note:empty{display:none}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:99;
+ align-items:center;justify-content:center;padding:20px}
+.modal.on{display:flex}
+.mbox{background:#1c1f24;border:1px solid var(--acc);border-radius:12px;max-width:760px;
+ width:100%;max-height:86vh;display:flex;flex-direction:column;padding:16px 18px;gap:10px}
+.mh{font-size:14px;color:#f0d68a}
+.mbox textarea{flex:1;min-height:220px;background:#14161a;color:#cfd2d6;border:1px solid var(--line);
+ border-radius:8px;padding:10px;font:12px/1.6 ui-monospace,Consolas,monospace;resize:vertical}
+.mf{display:flex;gap:10px;justify-content:flex-end}
+/* ★ 手机端（2026-10-16）：社长抱怨腾讯问卷"密密麻麻挤在选项里" ⇒
+   1) 四首词改成【单列铺开】（grid 在 560px 以下强制 1 列）；
+   2) 底部按钮原来会被挤成竖排 ⇒ 允许换行 + 缩小字号。 */
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr;gap:10px}
+  .poem{font-size:16px;line-height:2}
+  header{padding:12px 14px}
+  h1{font-size:16px}
+  .wrap{padding:14px}
+  footer{flex-wrap:wrap;gap:8px;padding:10px 12px}
+  footer button{font-size:12.5px;padding:7px 10px;white-space:nowrap}
+  #go{padding:8px 16px}
+  .done{font-size:12px}
+}
+</style></head><body>
+<header>
+  <h1>盲评 · 这条心事，哪一首的【意象】用得更好？</h1>
+  <div class="warn">本页是 <b>第 3 份 / 共 6 份</b>，共 20 题。各份题目不同但【相互重叠】——请只按本页作答。答完点页面底部「生成答案口令」，把那串字符粘回群里就行。</div>
+  <div class="sub">
+    <b>只评意象</b>（不是评"贴不贴心事"，也不是评格律/章法/结构）。<br>
+    标准：<b>更具体、更有古韵、不平庸套语、组内不重复堆砌</b>。<br>
+    四首顺序已逐条打乱，你看不到哪首是怎么生成的。<br>
+    <b>每题两个问题</b>：① 哪一首的<b>意象</b>用得更好　② 哪一首更<b>含蓄</b>（更像古人的手笔）。两问都选完才算答完。<br>
+    <b>即使四首水平接近，也请选出你更愿意再读一遍的那一首</b>（我们要的是你的「偏好」）；只有确实无从判断时，才选「四首实在难分」。
+    <span id="note"></span>
+  </div>
+</header>
+<div class="wrap" id="wrap"></div>
+<footer><span class="done" id="prog"></span>
+  <button id="go" disabled>导出结果 (JSON)</button>
+  <button id="tok" title="生成一小串字符，手机里直接粘到群里">生成答案口令</button>
+  <button id="imp" title="把之前导出的作答 JSON 读回来继续填">导入作答文件</button>
+  <button id="clr" title="清空本机保存的作答">清空重来</button>
+  <input type="file" id="fi" accept=".json,application/json" style="display:none"></footer>
+<div class="modal" id="modal"><div class="mbox">
+  <div class="mh">下面是你的作答 JSON。<b>进度已自动存在本机</b>；
+    若上面的下载没出现（手机/App 内浏览器常会拦下载），点「全选并复制」再粘给我即可。</div>
+  <textarea id="ta" readonly></textarea>
+  <div class="mf"><button id="copy">全选并复制</button><button id="close">关闭</button></div>
+</div></div>
+<script>
+const DATA = [{"sid": "9", "story": "出国留学第三年，语言不通、朋友不多。每次在超市看到中国商品，都忍不住买一点，好像这样就能离家乡近一些。", "category": "思乡", "emo": "思念", "poems": ["《江城子·客中见乡物》\n沧江月冷浸重城，夜潮生，旅魂惊。\n万里归乡客，孤雁唳寒汀。\n十载萍踪何处寄？秋节近，楚愁萦。\n\n忽逢故物眼双明，认前盟，泪先倾。\n一纸故园情，烽戍隔云屏。\n欲问远客今何似？风裂袂，打头星。", "《江城子·客中见乡货》\n天涯三载客殊方。语言障，友朋荒。独步市廛，何处觅乡邦。货架琳琅惊瞥见，中国字，泪盈眶。\n一包乡味入行囊。细端详，几回肠。万里家山，此物似桥梁。欲问归期何日许，云渺渺，水茫茫。", "《江城子·越洋三载》\n越洋三载寄萍踪。客囊空，岁华穷。超市琳琅，独认故园红。一纸乡愁消未得，拈辣酱，抵千盅。\n暮云何处是归鸿。楚江枫，洞庭蓬。雁字回时，霜月满帘栊。欲问衡阳多少路，风又起，打孤篷。", "《江城子·客中见乡物》\n天涯孤客又经秋。倚危楼，望江流。帆影浮云，何处是归舟。忽见故园蔬果在，浑不语，泪盈眸。\n十年书剑滞他州。月如钩，照离愁。梦里江南，春草绿汀洲。燕子双飞寻旧垒，风露冷，湿貂裘。"]}, {"sid": "11", "story": "朋友圈里有几百个好友，可真想找个人说话的时候，翻遍通讯录却不知道该打给谁。热闹都是别人的，我只有每天下班后空荡荡的出租屋。", "category": "孤独", "emo": "孤寂", "poems": ["水龙吟\n\n孤城暮色沉云，高楼望断天涯路。梧桐影里，月中谁弄，一帘秋露。灯火千窗，笑声遥递，隔墙朱户。念平生交游，零星散落，浑不似、当年数。\n\n漫记逢迎无数。遍题名、翻成迟暮。扁舟欲往，空山何处，烟深迷渡。叶落柴门，风敲竹径，此情难诉。但寒蛩声里，苔阶独步，共谁商略。", "《水龙吟·夜窗听风》\n夜来风叩窗棂，秋灯摇碎残花影。孤燕穿帘，空庭叶落，月明如镜。玉漏声沉，朱弦尘满，绿绮谁听？念瑶筝锦瑟，鸾音已断，浑不似、当时景。\n\n翻遍人间旧约，剩而今、参横月落。九歌未歇，箜篌空抱，此情难托。洛浦星寒，淄宫梧老，广寒萧索。算平生只有，逍遥夜里，向阑干角。", "《水龙吟·夜坐》\n暮云暗锁重楼，霓虹幻作星千点。屏间旧雨，指端新雁，渐成疏淡。列炬长街，喧阗车马，是谁家宴？对虚窗孤影，残茶冷砚，浑不似、春衫伴。\n忍记年时杯盏。笑谈间、烛花频剪。而今倦客，枯棋自覆，劫灰谁管？露湿青衫，尘侵素壁，夜寒如茧。料明朝、依旧江湖倦旅，听秋声怨。", "《水龙吟·秋夜》\n暮云低锁重门，孤鸿影断寒鸦起。残灯照壁，疏棂筛月，暗尘空积。叶落如潮，风铃碎语，总成凄惴。想玉壶光转，离宫桂冷，浑不似、人间世。\n\n漫道金樽能醉。怎消他、满襟清泪。银屏暗划，晶盘虚荐，总成孤对。半榻茶烟，一帘秋气，者般滋味。正更阑无寐，霜天寥廓，听寒蛩碎。"]}, {"sid": "21", "story": "工作压力大到喘不过气，每天加班到凌晨，头发一把一把掉。想辞职又不敢，这个年纪，任性不起了。", "category": "病痛", "emo": "惆怅", "poems": ["《水龙吟·匣剑吟》\n夕阳又下西楼，浮云遮断天涯路。残花溅泪，杨花飞雪，都随春去。半纸功名，一襟尘土，几番寒暑。算年来憔悴，镜中霜鬓，浑不似，当初否。\n\n忍看东流轻负。倩谁怜、飘零如许。楼台细雨，斜阳草树，总成凄楚。匣剑空鸣，壮怀消尽，此身何处。待重斟浊酒，临风自笑，作寻常语。", "《水龙吟·炎窗倦影》\n炎天蒸溽如炊，小窗倦眼迷尘雾。粉汗凝襟，午阴移砌，蝉声嘶苦。病枕愁侵，睡脸慵抬，寤寐无据。算吏部眠荒，酒醒何处，空搔首、添烦暑。\n\n镜里霜蓬几缕。问渴乌、可堪重数。残灯照壁，虚檐垂斗，夜长谁语。倦翼知还，孤云无着，此身如寄。待何时、一棹沧浪，共白鸟、烟波去。", "《水龙吟》\n砚池冻墨凝尘，枯灯嚼尽残宵味。案牍如山，霜丝渐老，镜中谁记。月堕西窗，鸡鸣荒径，岁华空逝。算此身长是，浮槎倦客，沧波里，萍踪寄。\n廿载风尘如蜕。剩而今、鬓星难避。季裘犹在，苏锥欲敝，壮怀余几。竹影摇寒，蛩声咽砌，暗潮翻袂。待明朝、又逐斜阳去，向嶙峋地。", "水龙吟\n\n炎天蒸溽如炊，粉汗侵衣浑未觉。午窗病枕，倦眸慵启，睡魔相虐。吏部眠难，渴乌声急，催科何恶。算浮生一梦，尘蒙双鬓，更谁念、行不得。\n\n堪笑车轮无角。问归途、坐忘漂泊。宿酲未解，头风愈否，酒非从事。写不成书，夜如何其，几番商略。叹骑瞎马，临深渊处，任天公醉。"]}, {"sid": "25", "story": "结婚前一个月分手了。喜帖都印好了，酒店也退了。我妈到现在还问我是不是我太挑。其实不是，是他家里不同意。我们连吵都没吵过。", "category": "失恋", "emo": "离别", "poems": ["《踏莎行》\n雁帖空裁，鸳盟易散，西风暗换流年箭。画楼朱阁褪铅华，孤鸾怯照菱花面。\n锦字成灰，瑶觞浸怨，高堂谁解冰霜砚？寒枝拣尽未栖迟，夜阑犹作双星盼。", "《踏莎行》\n柳色凝寒，江头咽雨。行舟欲系浑无计。东门车马各西东，关山一水空相觑。\n喜帖成尘，华堂罢醑。阿娘犹问谁相负。木兰舟上旧盟寒，孤帆没入苍烟去。", "《踏莎行》\n绣幄尘凝，瑶笙弦断，西风暗度青鸾馆。忍看双鲤剖银笺，啼痕犹带胭脂暖。\n碧海星沉，蓬山雾散，人间别有关情怨。簟纹灯影夜迢迢，孤鸿唳月哀笳远。", "《踏莎行》\n篆冷金笺，灰沉宝篆。空箱犹锁合欢扇。画堂虚设锦屏深，流苏半掩尘侵面。\n未忍重寻，旧时庭院。憔悴而今谁复念。哀笳莫奏别离声，潇湘云暗衡阳雁。"]}, {"sid": "28", "story": "方案是我熬了三个通宵做的，汇报的时候组长换了个封面就成了他的。散会他还拍我肩膀说年轻人别急。我笑着说了谢谢，回工位把源文件删了。", "category": "怀才不遇", "emo": "愤懑", "poems": ["《西江月·删稿》\n孤灯照壁夜迢迢，删尽墨痕天晓。\n几度寒窗凝稿，一朝冠盖轻抛。\n笑谈犹自说新苗，谁见枝头春老。", "《西江月·删稿》\n螳臂空悬虎颔，狐涎暗渡龙鳞。\n三更烛泪渍青衿，换得霜蹄蹴槿。\n\n腐鼠乍惊鹓影，鲍钱翻作琼琛。\n怒潮退处海生尘，独抱寒星自哂。", "《西江月·删档》\n朱门尽占春色，钱刀暗买风光。\n凡马骄嘶十二闲，谁是追风骏影？\n\n三夜星霜凝露，一朝冠盖偷香。\n笑言犹在耳旁萦，删尽云章万顷。", "《西江月·删稿》\n屠肆鼓刀何用，螳螂奋臂空忙。\n三更灯火九回肠，换得他人金榜。\n\n拍肩犹说莫慌，笑里藏尽锋芒。\n删尽源章焚砚匣，任他夸父逐阳。"]}, {"sid": "33", "story": "今年过年又没回去，说好了明年一定回。视频里我爸把手机举着绕了一圈，厨房灶台上炖着我爱吃的那个菜。挂了以后我坐了很久。", "category": "思乡", "emo": "思念", "poems": ["《青玉案·岁暮有怀》\n岁华荏苒成虚度\n又负却 归期误\n冷落灯花空自数\n灶烟萦处 鼎香浓处\n都是牵肠处\n\n浮云遮断家山路\n忍看荧屏旧时语\n半盏屠苏和泪煮\n一襟风絮 满庭霜缕\n更听寒更鼓", "《青玉案》\n霜天又误归期约。对云愁、遮重岳。灶火摇窗温旧镬。玉阑干外，柳风如削，吹老春衫薄。\n视频难画家山邈。空忆得、年时酌。南雁不来眉月落。青簟凉生，锦笺尘掠，独数檐花掠。", "《青玉案·除夕视频》\n屏间叠嶂烟波路，怎消得、春灯暮。灶暖羹香萦旧釜。一痕霜鬓，半窗梅影，总被重城阻。\n当年曾约莼鲈处，忍更说、归期误。试问江南春到否？燕巢空垒，夜潮孤橹，月满寒江渡。", "《青玉案》\n柳风难系归舟住。忍重看、南云暮。灶火摇窗香篆缕。玉阑干外，岁华空度。谁解相思苦。\n南楼画角催人去。眉月低檐雁无据。春瘦三分愁几许。一笺难托，夜寒如许。梦断江湖雨。"]}, {"sid": "36", "story": "搬来这个城市两年了。微信里四百多个联系人，翻到底，真正能半夜打电话的，一个都没有。有时候想找人说说话，又把手机放下了。", "category": "孤独", "emo": "孤寂", "poems": ["《念奴娇·秋夜寄怀》\n霜天寥落，又西风、吹老梧桐深巷。孤燕南飞，空绕遍、十二玉楼珠幌。叶落重门，灯昏永夜，月冷窗棂上。玉箫声断，此间谁共清响？\n犹记绿绮初调，朱弦暗度，曾许同幽赏。一自星湾人散后，几度参横月落。露湿残花，风摇扇影，暗把流年忘。寒枝拣尽，更无栖处堪傍。\n\n（注：选用素材——孤燕、叶落、窗棂、绿绮琴、朱弦、参横月落、落星湾、扇影、玉箫声断）", "《念奴娇·夜阑》\n孤城独倚，望苍茫云海，高楼凝碧。一叶扁舟横野渡，灯火半明还灭。深巷苔寒，空山鹤唳，冷月窥帘隙。梧桐声碎，为谁翻作愁寂。\n长记酒暖春衫，相携处、笑指星河侧。廿载萍踪何处问，剩得鬓霜堆积。欲扣柴门，怕惊幽独，露重貂裘湿。玉绳低转，此怀唯有天识。", "《念奴娇·客中夜坐》\n夜潮暗涌，卷千街灯晕，散作寒星。\n独倚危楼听万籁，孤燕偶掠空庭。\n叶落敲窗，风铃摇影，月空悬旧明。\n秋灯如豆，为谁长照伶俜？\n\n忽忆故里疏棂，残花影里，曾共玉壶倾。\n廿载萍踪浑似梦，赢得霜鬓星星。\n欲扣冰弦，恐惊邻笛，心事付沧溟。\n推窗遥见，半江渔火微荧。\n\n注：化用“孤燕”“叶落”“风铃”“月空”“秋灯”“残花影”等意象，以客居夜坐为境，通过“万籁”“空庭”“沧溟”等空阔意象反衬孤寂，结句“渔火微荧”暗藏欲语还休之态。", "《念奴娇·客中夜起》\n孤星坠野，看寒江蘸影，暗潮生灭。\n廿载萍踪迷渡口，空剩鬓边霜雪。\n竹影移墙，松声摇户，冷透窗间月。\n玉壶敲缺，此怀难与谁说。\n\n长记曲巷分灯，旗亭赌酒，醉把青衫裂。\n一自西风吹雁阵，故纸渐成陈叶。\n露湿更阑，苔封石径，独对秋灯咽。\n素屏犹展，半规残墨明灭。"]}, {"sid": "37", "story": "奶奶走的前一天还让我给她带橘子。我周末才回去，橘子买好了放在包里，到家的时候她已经睡了，再没醒过来。那袋橘子我放了很久没舍得扔。", "category": "悼亡", "emo": "悲凉", "poems": ["《临江仙·橘》\n霜苞未剖香先坼，空教袖手温存。三献礼虚陈。素帷灯暗，残语尚禁寒。\n遗谱尘封针线冷，宝奁犹贮春痕。返葬路漫漫。橘灯如豆，长照夜台人。", "《临江仙》\n瑟瑟西风凋碧树，寒烟衰草凄迷。\n空庭落叶满阶泥。\n当时曾约，携橘到深闺。\n\n一袋金黄犹在箧，摩挲不忍轻携。\n秋声又送夕阳低。\n几回错认，慈影倚门西。", "《临江仙》\n素幔低垂灯影暗，空庭冷月如钩。\n霜橘犹带旧时柔。尚存纤手泽，不忍弃箧瓯。\n那日叮咛犹在耳，归期还数从头。\n怎知一梦隔千秋。寒香凝箧底，清泪咽江流。", "《临江仙·橘囊》\n素手曾分秋露颗，空囊犹带霜痕。重泉应已断知闻。三献无从寄，遗恨绕丘坟。\n续命汤寒丹灶冷，阿母得仙去、鹤驾难循。垂堂诫在耳，游物祖无门。橘灯明灭处，忍见旧时温。"]}, {"sid": "42", "story": "研究生读了一半，越来越怀疑当初的选择。看着同学都在工作赚钱，我还在改一个自己都不信的开题报告。想退学又怕对不起这三年。", "category": "迷茫", "emo": "惆怅", "poems": ["《水调歌头·问学》\n掩卷忽长叹，残烛曳空庭。\n十年磨剑何用，霜刃未堪鸣。\n忍看同窗鹏翼，各趁风云去，争逐市朝声。\n独抱蠹编老，窗雪照伶俜。\n\n叩禅扉，参妙谛，问无生。\n维摩示疾，方丈谈玄总虚名。\n欲效拈花迦叶，又恐成住坏空，一念堕迷程。\n夜半松涛起，疑是海潮音。", "《水调歌头·岁晚书怀》\n斜阳沉远岫，浮云蔽重楼。\n残英倦逐东流去，烟雨暗汀洲。\n廿载芸窗空倚，一纸素缄难就，孤影对清秋。\n整冠重理旧时舟。\n\n杨花散，暮云合，意难收。\n砚池枯坐，争奈心绪似萍浮。\n欲效季鹰归去，又恐渊明笑我，进退两悠悠。\n惟见长江水，无语自东流。", "《水调歌头·夜半书窗》\n孤灯照残卷，寒砚锁眉峰。三年驹隙过眼，何处觅游踪？几度删增墨稿，难写云笺半纸，星斗转虚空。霜鬓侵铜镜，冷月挂疏桐。\n\n竹影动，疑故友，叩帘栊。推窗惟见，深巷落叶舞西风。欲效季鹰归去，怎奈莼鲈旧约，尽付水声中。夜半闻征雁，嘹唳入苍穹。", "《水调歌头·问津》\n砚池忽已涸，墨迹渐成尘。\n经年铅椠空对，槐国梦中身。\n忍看同窗鹏翼，各趁东风去，争渡口，踏青云。\n剩我蠹编残简，抱影度朝昏。\n\n叩禅关，询妙思，转迷津。\n止观经卷翻破，何处觅真源？\n欲效维摩问疾，却恐能言失旨，诸相本非真。\n夜半松涛起，孤月照无垠。"]}, {"sid": "43", "story": "体检查出问题，医生说先观察。我把报告叠好放抽屉里，没跟家里说。晚上还是会忍不住搜，越搜越睡不着。", "category": "病痛", "emo": "惆怅", "poems": ["《青玉案·检书》\n素笺叠恨藏深户。忍重检、灯前语。砚水凝尘无心注。药炉烟冷，鬓霜侵缕。残月窥窗处。\n夜阑犹自翻方谱。字字森然似幽诅。欲问平安天未许。一春消息，半生羁旅。散作廉纤雨。", "《青玉案》\n斜阳又送春归去。忍重看、花如雨。一纸浮云无著处。半窗昏暝，满城风絮，都作愁滋味。\n灯前暗把流光数。碎语零星夜如缕。却恐高堂惊岁暮。几番欲说，几番还住，月冷楼台路。", "《青玉案·病中观报告有作》\n危舷独倚风涛怒，忍重看、蛟蛇舞。叠纸深藏如伏虎。灯花空结，药烟萦户，暗把流年数。\n蛮军压境谁支拄？虮虱微躯等朝露。欲唤天鸡啼未曙。一星渔火，半江雷鼓，夜气沉如许。", "《青玉案·病中隐》\n危舷独倚苍波注。乍雷雹、惊鸥鹭。巨舰沉疴谁与诉？叠痕深锁，灯花暗数，夜夜蛟蛇舞。\n窥渊犹自搜残谱。百转枯肠作兵伍。天险未逾心已腐。鼓鼙声里，蛮军压境，一霎星如雨。"]}, {"sid": "92", "story": "每年他生日那天我都会去那家店吃碗面。老板早就换人了。", "category": "悼亡", "emo": "思念", "poems": ["《水调歌头》\n珠旗卷暮色，玉鞍碾旧尘。\n裕陵松柏犹在，谁记锦袍春？\n曾约瑶京同醉，怎奈胡笳催别，孤雁没寒云。\n行宫外，衰兰泣，月如轮。\n\n十年重到洛阳，空觅旧纱痕。\n纵有吴宫新酿，难敌西风残照，冷透故人魂。\n檐角铃铎响，疑是唤归门。", "《水调歌头·岁岁此门过》\n岁岁此门过，重挑旧时肴。\n不知檐下归燕，曾见几回娇？\n春草江南岸北，秋月楼头客里，江上送归潮。\n惟有月明在，长照水迢迢。\n\n梅子雨，黄时酒，漫相抛。\n人间最苦，何处重问谢娘桥？\n纵有垂杨千缕，难系流光一瞬，心事付银箫。\n吹入沧波去，江海寄余生。", "《水调歌头·素面》\n霜案叠春雪，素缕浣青瓷。\n旧年香稻深处，曾共烛花低。\n廿四桥边风絮，十二阑前玉漏，星斗转参差。\n独对一灯碧，长箸点涟漪。\n\n槐烟换，梅雨渍，燕巢移。\n石阶苔老，犹认当日履痕稀。\n漫道莼鲈堪脍，谁解盐梅滋味，银箸渐凉时。\n檐角悬冰魄，夜夜照空卮。", "《水调歌头》\n玉鞍曾系处，珠箔卷深秋。旧纱犹护残烛，孤影上帘钩。欲问瑶京雁字，却道胡笳声断，衰兰满汀洲。谁解佩环意，空对水西流。\n铜辇陌，霓裳曲，总成休。宋王台畔，犹记歌舞绕层楼。莫叹洛阳城阙，且看锦官云树，何处不神州。但使金风在，吹梦到沧洲。"]}, {"sid": "93", "story": "我妈的微信我一直没删。有时候会点进去看看她的头像，还是那张在公园拍的。", "category": "悼亡", "emo": "思念", "poems": ["《青玉案·夜思》\n霜天月浸寒江渚，忍重到、凭栏处。万点芦花风里絮。孤舟横岸，雁声南去，灯火迷归路。\n十年芳草江南暮，别梦依稀共谁语？欲寄鱼书终间阻。梅花空老，春潮犹怒，夜夜啼鹃苦。", "《青玉案·夜读先慈旧笺》\n青衿旧墨封尘久。忍重展、春衫袖。一树棠云湮更漏。鹤发灯前，黄须案左，廿载风盈牖。\n九龄空负趋庭授。诸弟飘零雁声瘦。欲奉亲时亲已朽。宝奁遗泽，先公残酒，月冷空庭又。", "《青玉案·夜寤》\n冰蟾又转西廊庑。忍重到、羹汤处。\n线脚犹温青衿缕。秋坟枯坐，春晖迟暮。总被风吹去。\n\n九龄雏鹤空延伫。泉路应迷旧时路。\n欲问承颜谁与诉。半窗残烛，一庭寒雨。焚作灰千炷。", "《青玉案·夜窗听雨》\n空庭梧叶敲秋雨，更滴碎、残灯语。\n半壁苔痕侵旧础。\n砚池波皱，画屏尘聚，蛛网悬朱户。\n当年石径簪花处，露湿春衫柳烟缕。\n欲问归期天未许。\n一窗竹影，满襟风絮，散作萧萧去。"]}, {"sid": "97", "story": "三十四岁，单身，存款不多。我妈说你再不结婚就晚了。我说我知道。", "category": "迷茫", "emo": "惆怅", "poems": ["《临江仙》\n岁晚客舟添雪鬓，孤灯倦倚重门。\n故园花事又纷纷。欲寄平安字，砚冷墨无痕。\n闻道长安春正好，可能容我闲身？\n半囊羞涩半囊尘。风霜欺短鬓，不敢怨东君。", "《临江仙》\n雨打杨花深闭户，楼台暮色沉沉。\n浮云过尽未成霖。斜阳空照水，一去不西临。\n\n杯底残香和泪饮，年光暗里相侵。\n东流到海几升沉。孤舟何处系，烟霭满江浔。", "《临江仙》\n春圃逢花犹怯看，浇花人立空庭。早莺啼破绿烟轻。艳阳簪鬓雪，过雨一衫青。\n三径草深迷旧迹，北山薇老谁耕？书邮难寄岁华声。池塘春草在，只影对寒星。", "《临江仙》\n春圃逢春犹怯看，浇花人立空庭。早莺啼破晓烟青。露凝芳径冷，风起落红轻。\n月底巾车曾过雨，早梅已谢还生。艳阳天气又清明。领巾依旧在，何日共谁行。"]}, {"sid": "101", "story": "别人问我有什么打算，我说走一步看一步。其实我连这一步要往哪走都不确定。", "category": "迷茫", "emo": "惆怅", "poems": ["《水龙吟》\n雾迷三叉路口，问浮生、甚时能度。云深雁杳，风回浪卷，几番朝暮。惘惘登楼，恍然临水，此身何处。算前程未定，徘徊又止，空凝伫、浑无据。\n休说鹏程高举。但而今、迷途难诉。青衫尘满，芒鞋露冷，倦游情绪。欲问归程，夕阳西下，乱山无数。怅踟蹰、一步还成一步，向谁分付。", "《水龙吟·登楼》\n少年听雨楼台，杨花散作浮云缕。残阳又下，危阑独倚，乱红谁主。一霎风来，半池萍碎，欲留还去。算重城望断，烟波江上，浑不辨，东流处。\n\n休问新愁几许。怕明朝、酒醒迟暮。青骢巷陌，银笺旧约，总成间阻。燕子归时，斜阳犹在，旧曾游路。但徘徊、数尽长更短漏，共檐声语。", "《水龙吟·癸卯秋分作》\n暮云暗结层阴，孤鸿倦掠寒汀去。蘅皋路杳，西风又起，乱萍难驻。短楫空横，烟波无际，欲寻还住。算浮生到此，迷津未解，浑不辨，来时路。\n忍说鹏程轻许？怕重问、残棋劫数。青衫渍酒，霜丝侵鬓，壮怀迟暮。半局枯枰，一襟秋气，几番凉雨。待明朝醒后，寒潮自涌，向芦花渡。", "《水龙吟·惘然》\n浮生若寄虚飘飘，底事萦怀如絮。槐根蚁梦，桃源路杳，几番回顾。月下逢稀，花间影碎，旧盟难据。算此身如寄，徘徊三叉，迷途久，知何处。\n惆怅韶光迟暮。更谁怜、穿杨倦旅。游醉乡远，啼乌声断，彩云飞去。树上瓢空，思人树老，总成虚度。但踟蹰、还向苍茫，听尽西城更鼓。"]}, {"sid": "102", "story": "我从大城市回到老家，以为会轻松点。现在每天被问什么时候结婚，还不如在外面。", "category": "迷茫", "emo": "惆怅", "poems": ["《水调歌头·归乡》\n归舟载愁重，故里暮云收。\n残阳斜倚空阁，孤影落西洲。\n忍看杨花飞尽，偏是杜鹃声切，细雨湿危楼。\n一盏旧醅冷，难洗净乡愁。\n\n东流水，浮云意，两悠悠。\n当时只道，莼菜鲈脍可忘忧。\n谁料邻翁相问，却道姻缘未就，镇日锁眉头。\n花落春将老，何处觅行舟？", "《水调歌头·归乡》\n归舟载尘色，竹影掩重门。\n案牍久埋清骨，闹市锁云根。\n偶逐林泉幽径，却恼檐前燕语，絮絮问寒温。\n苔径迷离处，暮色染青襟。\n\n故园柳，浑不解，客愁新。\n数峰江上，空对残照忆莼鲈。\n欲写闲居赋就，谁料政堂风起，吹散旧时云。\n孤雁南飞急，烟水正黄昏。", "《水调歌头·归里》\n游宦倦行色，返故里衡庐。\n故人相问何如，唯道食无鱼。\n案牍已生尘网，车马尚留残迹，俗事怎驱除。\n闹市避骢马，深巷卜宅居。\n\n掩柴门，对清影，自踌躇。\n此身何寄，簪绂抛却作闲居。\n欲效三闾大夫，还恐循吏相笑，姓字费疑猜。\n风尘京洛满，争似旧时初。", "《水调歌头·归乡》\n倦羽返旧林，故里暂栖身。\n以为离尘网，柴门远世纷。\n怎奈归未稳，乡音绕耳频。\n巷陌逢邻叟，堂前对至亲。\n朝暮问，何时结良姻？\n笑语强装欢，愁绪暗锁心。\n故园风物虽好，难抵流言侵。\n月下独徘徊，灯前自苦吟。\n何似天涯客，萍踪无问津。"]}, {"sid": "106", "story": "做完手术的第三个月，我还是会半夜醒来摸伤口。医生说恢复得很好，我知道，但就是怕。", "category": "病痛", "emo": "悲凉", "poems": ["《念奴娇·秋夜自遣》\n西风吹老，又天寒时节，落叶如雨。\n草木萧条秋色里，一片笳声凄楚。\n落日荒烟，风尘荏苒，怕问今何许。\n琵琶弦断，旧愁新恨难数。\n\n犹记小阁深灯，药炉烟袅，夜半频惊顾。\n几度寻痕，分明在、却道当时非故。\n病骨支离，暗惊时序，凉透纱窗曙。\n此情谁解，半庭残月无主。", "《念奴娇·病中夜起》\n更残漏尽，又惊回、枕上几番寒热。\n扪虱枯肤，犹自怯、新旧瘢痕明灭。\n药鼎香销，霜蟾影堕，冷透青绫褶。\n孤怀谁会，暗蛩啼破秋叶。\n\n长记刀圭光阴，茧丝抽未尽，肝肠如结。\n纵道春回，浑不信、真个愁根能绝。\n露电浮生，风灯幻影，此意凭谁说。\n披衣重起，一星斜照窗隙。", "《念奴娇·夜省刀痕》\n夜潮初退，认霜痕犹在，幽幽难抚。一隙星芒窥枕畔，暗把年光偷度。雷雹曾惊，危舷自稳，身世如飘絮。鼓鼙声里，几回重理残绪。\n还记战阵森然，甲兵相逼处，行伍都误。怒目苍天终不语，剩得此身微露。旱魃无情，东风又恶，谁解回肠苦。披衣起坐，月明还照孤屿。", "《念奴娇·夜惊刀痕》\n夜潮翻雪，乍惊回、枕上雷雹初歇。\n危舷独倚，认旧时、战阵森然行列。\n甲兵犹在，鼓鼙未冷，怒目眦空裂。\n洪涛声里，此身如寄一叶。\n\n堪笑猛士当年，急湍争渡，水雷穿云裂。\n天险横江，算此际、不过是行伍重涉。\n创痕深护，怕人问取，只道春冰滑。\n推窗遥见，半规凉月如铁。"]}, {"sid": "107", "story": "我爸的腿不好，出门要拄拐。上次我想扶他，他把我的手打开了。", "category": "病痛", "emo": "悲凉", "poems": ["《临江仙·椿庭杖影》\n病骨难支藤杖冷，残阳影里徘徊。儿扶欲近却频挥。苔阶风露重，鬓雪岁华催。\n忆昔擎天双臂健，而今拄杖庭闱。落花声里暮云垂。春晖犹未报，寸草泪空垂。", "《临江仙·岁暮感怀》\n岁暮空传箫鼓，樽前怕说团圞。\n彩巾犹记捧晴天。买花人已老，倚杖影偏寒。\n促节偏惊残漏，新醅难敌愁边。\n邻家笑语隔重阑。忍扶消瘦骨，却袖泪阑干。", "《临江仙》\n瘴雨蛮烟侵瘦骨，年年负尽花朝。杖头挑日过溪桥。冻云封野渡，谁与话寒宵。\n记得年时春社近，彩巾曾系柔条。而今扶杖看人娇。乱鸦衔暝色，空绕旧时巢。", "《临江仙·秋日感怀》\n瑟瑟西风凋碧树，残阳又下寒丘。\n经年风雨蚀重楼。阶前枯叶积，砌下暗蛩收。\n怕见天寒扶病骨，杖藜还倚墙头。\n琵琶声断暮云稠。孤鸿归唳远，秋水自东流。"]}, {"sid": "113", "story": "最好的同事被裁了。走那天他把工位收拾得很干净，还擦了一遍桌子。我们加了微信，到现在没聊过。", "category": "离别", "emo": "离别", "poems": ["《青玉案·别友》\n霜刃初收寒未驻，忍重扫、苔痕处。一砚秋光曾共谱。屏间星语，指间云缕，散作天涯絮。\n槐根蚁梦迷津渡，燕去梁空暗尘舞。总把深樽浇别绪。半窗残月，满城更鼓，夜雨新裁苎。", "《青玉案》\n柳丝遮断关山路，更忍看、车尘去。江畔行舟催晚渡。孤帆影里，东门烟外，芳草连天暮。\n别来几度风兼雨，欲寄音书竟何处。青草池塘空自绿。一春鱼雁，半笺心事，都付寒潮诉。", "《青玉案·别故人》\n离筵散作秋江雨。更谁共、西窗语。\n一霎分襟南北路。柳边残笛，灯前坠绪，都逐流云去。\n屏间消息沉如许。怕问新寒旧游处。\n别有酸辛天未许。半规凉月，数声更鼓，照尽人间遽。", "《青玉案·别故人》\n离筵散作秋声赋。忍重问、分襟处。\n长亭柳老浑无絮。半规凉月，一襟清露，客影随波去。\n曲江头有花如诉。灞陵桥畔人初度。\n此去知音谁共语？落花时节，绿杨阴里，空记相逢否。"]}, {"sid": "114", "story": "高中毕业那次聚会，大家说十年后一定聚。十年过去了，群里最后一条消息是三年前的。", "category": "离别", "emo": "感时", "poems": ["蝶恋花\n\n旧塔烟痕凝暮色。六代繁华，暗逐流波急。越王台畔青骢立，戏马台前秋草碧。\n十载深盟谁更忆。断雁云沉，消息凭风寂。华清池冷霓裳息，独向空城听夜笛。", "蝶恋花\n\n旧塔台城烟柳细。六代繁华，都付寒潮里。记得华清池上醉，开元贞观空垂泪。\n十载青骢归也未？一霎流光，暗把朱颜替。铜雀春深人独自，玉塔铃语西风碎。", "蝶恋花\n\n白日西沉流水去。桃李春风，散作天涯絮。明镜朱颜谁与驻，鸡鸣风雨人何处。\n\n十载约期空自许。草色迷离，旧径无寻处。月出东墙清似故，江流不尽朝还暮。", "《蝶恋花·旧约》\n一别黉门秋几度。约指重来，共把离肠诉。谁料星霜成间阻。锦书欲寄无凭据。\n残酒未消人已去。旧约如烟，散作天涯絮。满目山河空念故。斜阳立尽梧桐树。"]}, {"sid": "119", "story": "外婆走的时候我在国外，回来只看到一张照片。我妈说，她一直等你。", "category": "离别", "emo": "悲凉", "poems": ["《江城子·归迟》\n蓬山鹤驾杳难追，海云低，纸灰飞。\n一帧慈容，空对泪垂垂。\n犹记叮咛窗烛下，星斗转，露沾衣。\n\n重洋阻断梦来稀，月斜时，影孤羁。\n归路八千，终负倚门期。\n剩有春晖凝寸草，风起处，雨如丝。", "《江城子·秋殇》\n西风卷地扫残黄，暮云凉，雁成行。\n一叶秋声，片片叩寒窗。\n忍看落晖沉远嶂，山寂寂，水苍苍。\n\n十年客路误归航，鬓添霜，泪千行。\n旧日音容，空对照片黄。\n多少叮咛犹在耳，风飒飒，过空堂。", "《江城子·哀外婆》\n天涯归晚恨难平，叩银屏，唤无声。三尺遗容，相对泪如倾。遗言犹在耳，空泣血，诉谁听。\n当年执手嘱叮咛，语轻轻，意萦萦。一别成川，无处觅慈灵。欲凭棺椁终未得，风飒飒，雨冥冥。", "《江城子·归迟》\n海天万里阻归程。噩梦惊，已吞声。凭棺无计，空对一灯青。遗言犹在耳，泪满膺。\n重泉路迥恨难平。忆平生，最伤情。招魂何处，烟雨暗寒汀。阿母得仙去，剩零丁。"]}];
+const LAB = "甲乙丙丁戊己庚辛";
+const Q2 = true;        // ★ 是否加「含蓄」第二问（2026-10-15；只在网页版加，问卷不加）
+const TIE = true;    // 是否给「难分」按钮
+const SRC = "inject_1014_1633";      // 批次名（写进导出文件，结算方知道这是哪批）
+const SHARD = 3;  // ★ 分片编号（0=不分片）；分片时答案口令要以它开头
+const KEY = "blindans::" + "inject_1014_1633|tie=strict|q2=1|web-s3";  // ★ 本机自动保存的键（含 批次+配置+页面角色）
+let ans = {};
+let ready = false;        // 恢复进度期间不许写盘，否则会把旧进度冲成空
+const PICKERS = {};       // sid → pick()，供「恢复进度」回放
+const wrap = document.getElementById('wrap');
+
+/* ★★ 2026-10-15 加：本机自动保存 + 随时可导出
+   【事故】社长填了 11 题，既存不下也导不出，非常愤怒。两个根因都在页面上：
+     ① 导出按钮原来要【全部答完】才解锁：go.disabled = n < DATA.length
+        ⇒ 答了 11/40 时按钮是灰的、点不动 ⇒ 看起来"无法导出"；
+     ② 页面【完全没有】本地保存 ⇒ 一刷新/一关页全丢 ⇒ 看起来"无法保存"。
+   现在：每点一次就存 localStorage；重开页面自动恢复；【答了 1 题就能导出】。*/
+function loadSaved(){
+  try{ const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; }
+  catch(e){ return null; }
+}
+function save(){
+  if(!ready) return;
+  try{ localStorage.setItem(KEY, JSON.stringify(ans)); }catch(e){}
+}
+function say(msg){ const n = document.getElementById('note'); if(n) n.textContent = msg || ''; }
+DATA.forEach((it, qi) => {
+  const d = document.createElement('div'); d.className = 'q';
+  let cells = '';
+  it.poems.forEach((p, i) => {
+    const lb = LAB[i] + (it.tags ? ` · ${it.tags[i]}` : '');   // ★ tags 只有含答案版才有
+    cells += `<div class="side" data-v="${i}"><div class="tag">${lb}</div>
+      <div class="poem"></div><div class="mat" data-m="${i}"></div></div>`;
+  });
+  const row = (q, lab) => {
+    let s = `<div class="opts" data-q="${q}"><span class="qlab">${lab}</span>`;
+    for (let i = 0; i < it.poems.length; i++) s += `<button data-c="${i}">${LAB[i]}</button>`;
+    if (TIE) s += `<button data-c="T">难分</button>`;
+    return s + '</div>';
+  };
+  d.innerHTML = `<div class="qh"><span class="n">心事 ${it.sid}</span>
+      <span class="pill">${it.category || ''} · 目标情绪：${it.emo || ''}</span></div>
+    <div class="story">${it.story}</div>
+    <div class="grid">${cells}</div>
+    ${row(1, Q2 ? '① 意象更好：' : '选它：')}
+    ${Q2 ? row(2, '② 更含蓄（更像古人的手笔）：') : ''}`;
+  ans[it.sid] = Q2 ? {q1: null, q2: null} : null;
+  const sides = d.querySelectorAll('.side');
+  it.poems.forEach((p, i) => {
+    sides[i].querySelector('.poem').textContent = p;
+    const mb = sides[i].querySelector('.mat');     // ★ mats 只有含答案版才有
+    if (mb && it.mats) mb.textContent = it.mats[i] || '';
+  });
+  function pick(q, c){
+    if (Q2) ans[it.sid]['q' + q] = c; else ans[it.sid] = c;
+    const r = d.querySelector(`.opts[data-q="${q}"]`);
+    if (r) r.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.c === c));
+    if (q === 1) sides.forEach(s => s.classList.toggle('sel', s.dataset.v === c));
+    progress();
+  }
+  d.querySelectorAll('.opts').forEach(r => {
+    const q = Q2 ? Number(r.dataset.q) : 1;
+    r.querySelectorAll('button').forEach(b => b.onclick = () => pick(q, b.dataset.c));
+  });
+  PICKERS[it.sid] = pick;      // ★ 登记，供「恢复进度」回放
+  // ★ 点诗卡 = 回答第 ① 问（保持老习惯：先看图再选）
+  sides.forEach(s => s.onclick = () => pick(1, s.dataset.v));
+  wrap.appendChild(d);
+});
+function nDone(){
+  return DATA.filter(it => {
+    const a = ans[it.sid];
+    return Q2 ? (a && a.q1 != null && a.q2 != null) : (a != null);
+  }).length;
+}
+function progress(){
+  const n = nDone();
+  document.getElementById('prog').textContent = `已完成 ${n} / ${DATA.length}`;
+  const go = document.getElementById('go');
+  go.disabled = (n === 0);                       // ★ 答了 1 题就能导（原来要全答完）
+  go.textContent = n >= DATA.length ? '导出结果 (JSON)' : `导出已答 (${n}/${DATA.length})`;
+  save();
+}
+
+// ★ 恢复本机保存的进度（在注册完所有 pick 之后回放）
+(function restore(){
+  const s = loadSaved();
+  if(!s) return;
+  const a = s.answers || s;                      // 兼容旧的无包装格式
+  let k = 0;
+  // ⚠️ ans 里【每条心事都被初始化成 {q1:null,q2:null}】⇒ 判"有没有答过"必须看
+  //    q1/q2 是否为 null，不能只看 v 是否为 null（否则会把 40 条都算成"已恢复"）。
+  DATA.forEach(it => {
+    const v = a[it.sid];
+    if(v == null || !PICKERS[it.sid]) return;
+    if(Q2 && typeof v === 'object'){
+      if(v.q1 != null){ PICKERS[it.sid](1, v.q1); k++; }
+      if(v.q2 != null) PICKERS[it.sid](2, v.q2);
+    } else if(!Q2 && typeof v !== 'object'){
+      PICKERS[it.sid](1, v);
+      k++;
+    }
+  });
+  if(k) say(`已自动恢复本机保存的进度（${k} 条已答）——进度随手保存，关页也不怕`);
+})();
+ready = true;
+progress();
+
+function payload(){
+  return JSON.stringify({
+    source: SRC, shard: SHARD, q2: Q2, tie: TIE,
+    answered: nDone(), total: DATA.length,
+    answers: ans
+  }, null, 1);
+}
+
+/* ★★ 答案口令（2026-10-16 加）：纯静态页面【没有服务器收答案】，
+   所以给评委一条最省事的路 —— 答完点一下，得到一小串字符，粘到群里就行。
+   编码：每题一个字符，A/B/C/D = 甲乙丙丁，E = 难分，'-' = 未答
+        （两问时每题两个字符：先①意象、后②含蓄）
+   开头 S<编号>- 表示是哪一份问卷；末尾 4 位是校验（防手抄/漏字）。
+   结算脚本按 {source, shard} + _qtn_shards.json 还原到 40 题上。*/
+function tokenStr(){
+  const M = {'0':'A','1':'B','2':'C','3':'D','T':'E'};
+  let s = '';
+  DATA.forEach(it => {
+    const a = ans[it.sid];
+    const g = v => (v == null ? '-' : (M[v] || '?'));
+    s += Q2 ? (g(a ? a.q1 : null) + g(a ? a.q2 : null)) : g(a);
+  });
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 9973;
+  return (SHARD ? ('S' + SHARD + '-') : '') + s + '-' + String(h).padStart(4, '0');
+}
+document.getElementById('tok').onclick = () => {
+  const t = tokenStr();
+  document.getElementById('ta').value = t;
+  document.getElementById('modal').classList.add('on');
+  try{ navigator.clipboard && navigator.clipboard.writeText(t); }catch(e){}
+  say(`答案口令已生成（已答 ${nDone()}/${DATA.length}）——直接粘到群里即可，不用发文件`);
+};
+
+document.getElementById('go').onclick = () => {
+  const s = payload();
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '');
+  try{                                           // ① 先试下载文件
+    const blob = new Blob([s], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `盲评作答_${SRC}${SHARD ? '_s' + SHARD : ''}_${stamp}.json`;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }catch(e){}
+  try{ navigator.clipboard && navigator.clipboard.writeText(s); }catch(e){}   // ② 顺手进剪贴板
+  document.getElementById('ta').value = s;       // ③ 兜底：弹窗里可全选复制
+  document.getElementById('modal').classList.add('on');
+  say('已生成作答文件：下载没出现的话，点弹窗里的「全选并复制」');
+};
+document.getElementById('copy').onclick = () => {
+  const t = document.getElementById('ta');
+  t.focus(); t.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  try{ navigator.clipboard.writeText(t.value); }catch(e){}
+  document.getElementById('copy').textContent = '已复制 ✓';
+};
+document.getElementById('close').onclick = () => {
+  document.getElementById('modal').classList.remove('on');
+};
+document.getElementById('clr').onclick = () => {
+  if(confirm('清空本机保存的全部作答？此操作不可撤销。已导出的文件不受影响。')){
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  }
+};
+// ★ 导入作答文件（2026-10-15 加）：换了电脑/浏览器、或清过缓存时，
+//   把之前导出的 JSON 读回来接着填（自动保存是【本机】的，换机不会跟着走）。
+document.getElementById('imp').onclick = () => document.getElementById('fi').click();
+document.getElementById('fi').onchange = (ev) => {
+  const f = ev.target.files && ev.target.files[0];
+  if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    let o;
+    try{ o = JSON.parse(rd.result); }
+    catch(e){ alert('这个文件不是作答 JSON'); return; }
+    const a = o.answers || o;
+    let k = 0;
+    DATA.forEach(it => {
+      const v = a[it.sid];
+      if(v == null || !PICKERS[it.sid]) return;
+      if(Q2 && typeof v === 'object'){
+        if(v.q1 != null){ PICKERS[it.sid](1, v.q1); k++; }
+        if(v.q2 != null) PICKERS[it.sid](2, v.q2);
+      } else if(!Q2 && typeof v !== 'object'){
+        PICKERS[it.sid](1, v);
+        k++;
+      }
+    });
+    progress();
+    say(`已从「${f.name}」导入 ${k} 条作答`);
+  };
+  rd.readAsText(f, 'utf-8');
+  ev.target.value = '';
+};
+</script></body></html>
